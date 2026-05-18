@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>인터넷 중독 진단척도 K-척도</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Pretendard', 'Noto Sans KR', Arial, sans-serif;
+      background: #f4f6fb;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 18px 60px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #243b6b, #4f75c9);
+      color: white;
+      padding: 34px 28px;
+      border-radius: 24px;
+      box-shadow: 0 14px 30px rgba(27, 50, 100, .18);
+      margin-bottom: 24px;
+    }
+    .hero h1 { margin: 0 0 10px; font-size: 32px; }
+    .hero p { margin: 0; opacity: .95; font-size: 17px; }
+    .notice, .card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
+    }
+    .notice {
+      border-left: 8px solid #4f75c9;
+      background: #ffffff;
+    }
+    h2 { margin-top: 0; color: #243b6b; }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
+    .info-box {
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+    }
+    .info-box strong { color: #1d4ed8; }
+    .question {
+      padding: 18px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .question:last-child { border-bottom: none; }
+    .q-title {
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .scale {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    label.option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #f8fafc;
+      border: 1px solid #dbe3ef;
+      border-radius: 12px;
+      padding: 10px 6px;
+      cursor: pointer;
+      font-size: 14px;
+      text-align: center;
+    }
+    label.option:hover { background: #eef4ff; }
+    input[type="radio"] { accent-color: #315bb6; }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .primary { background: #315bb6; color: white; }
+    .secondary { background: #e5e7eb; color: #111827; }
+    .result {
+      display: none;
+      margin-top: 22px;
+      padding: 22px;
+      border-radius: 18px;
+      background: #f8fafc;
+      border: 2px solid #dbe3ef;
+    }
+    .score {
+      font-size: 28px;
+      font-weight: 800;
+      color: #243b6b;
+    }
+    .level {
+      font-size: 22px;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+    .low { color: #047857; }
+    .mid { color: #b45309; }
+    .high { color: #b91c1c; }
+    .footer {
+      text-align: center;
+      color: #6b7280;
+      font-size: 13px;
+      margin-top: 28px;
+    }
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 25px; }
+      .scale { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <h1>인터넷 중독 진단척도 K-척도</h1>
+      <p>인터넷 사용으로 인한 일상생활 장애, 자기조절 실패, 금단, 내성 등을 점검하는 수업용 자기진단 웹페이지입니다.</p>
+    </section>
+
+    <section class="notice">
+      <strong>안내</strong><br />
+      이 웹페이지는 교육용 예시입니다. 실제 K-척도 공식 문항과 판정 기준을 사용하려면 한국지능정보사회진흥원 등 공식 자료의 문항과 채점 기준으로 교체해야 합니다.
+    </section>
+
+    <section class="card">
+      <h2>검사 방법</h2>
+      <div class="info-grid">
+        <div class="info-box"><strong>1점</strong><br />전혀 그렇지 않다</div>
+        <div class="info-box"><strong>2점</strong><br />그렇지 않다</div>
+        <div class="info-box"><strong>3점</strong><br />그렇다</div>
+        <div class="info-box"><strong>4점</strong><br />매우 그렇다</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>자가진단 문항</h2>
+      <form id="surveyForm"></form>
+      <div class="buttons">
+        <button class="primary" type="button" onclick="calculateScore()">결과 보기</button>
+        <button class="secondary" type="button" onclick="resetForm()">다시 하기</button>
+      </div>
+      <div id="result" class="result"></div>
+    </section>
+
+    <section class="card">
+      <h2>지도 시 유의점</h2>
+      <p>
+        높은 점수가 나왔다고 해서 곧바로 ‘중독’으로 단정하기보다, 사용시간, 수면, 학업, 가족관계, 정서 상태, 또래관계 등을 함께 살펴보아야 합니다. 청소년 지도에서는 단순한 사용 제한보다 자기조절력 회복, 대체활동 제공, 가족 의사소통 회복, 전문상담 연계가 중요합니다.
+      </p>
+    </section>
+
+    <div class="footer">K-척도 수업용 웹페이지 예시</div>
+  </main>
+
+  <script>
+    const questions = [
+      '인터넷 사용 때문에 해야 할 일을 미룬 적이 있다.',
+      '인터넷을 하느라 수면 시간이 줄어든 적이 있다.',
+      '인터넷을 하지 못하면 불안하거나 초조하다.',
+      '처음 생각한 시간보다 더 오래 인터넷을 사용한다.',
+      '인터넷 사용을 줄이려고 했지만 실패한 적이 있다.',
+      '인터넷 때문에 가족이나 친구와 갈등을 겪은 적이 있다.',
+      '기분이 좋지 않을 때 인터넷을 통해 해소하려고 한다.',
+      '현실의 만남보다 온라인 활동이 더 편하게 느껴질 때가 있다.',
+      '인터넷 사용시간을 숨기거나 거짓말한 적이 있다.',
+      '인터넷을 더 오래 해야 만족감을 느낀다.',
+      '인터넷 때문에 학업이나 생활 리듬이 흐트러진 적이 있다.',
+      '인터넷 사용을 중단하라는 말을 들으면 짜증이 난다.',
+      '인터넷을 하지 않을 때도 인터넷 생각이 자주 난다.',
+      '인터넷 사용 후 후회하면서도 다시 반복한다.',
+      '인터넷 사용이 내 생활을 통제하고 있다고 느낀 적이 있다.'
+    ];
+
+    const form = document.getElementById('surveyForm');
+
+    questions.forEach((q, index) => {
+      const qBox = document.createElement('div');
+      qBox.className = 'question';
+      qBox.innerHTML = `
+        <div class="q-title">${index + 1}. ${q}</div>
+        <div class="scale">
+          ${[1, 2, 3, 4].map(score => `
+            <label class="option">
+              <input type="radio" name="q${index}" value="${score}" />
+              ${score}점
+            </label>
+          `).join('')}
+        </div>
+      `;
+      form.appendChild(qBox);
+    });
+
+    function calculateScore() {
+      let total = 0;
+      let answered = 0;
+
+      questions.forEach((_, index) => {
+        const checked = document.querySelector(`input[name="q${index}"]:checked`);
+        if (checked) {
+          total += Number(checked.value);
+          answered++;
+        }
+      });
+
+      if (answered < questions.length) {
+        alert('모든 문항에 응답해 주세요.');
+        return;
+      }
+
+      const maxScore = questions.length * 4;
+      const percent = Math.round((total / maxScore) * 100);
+      let level = '';
+      let className = '';
+      let guide = '';
+
+      if (percent < 45) {
+        level = '일반 사용자군';
+        className = 'low';
+        guide = '현재는 비교적 자기조절이 가능한 수준으로 보입니다. 다만 수면, 학업, 가족관계의 균형을 계속 점검하는 것이 좋습니다.';
+      } else if (percent < 70) {
+        level = '잠재적 위험군';
+        className = 'mid';
+        guide = '인터넷 사용이 생활에 영향을 주기 시작한 상태일 수 있습니다. 사용시간 기록, 취침 전 사용 제한, 대체활동 계획이 필요합니다.';
+      } else {
+        level = '고위험 사용자군';
+        className = 'high';
+        guide = '인터넷 사용으로 일상생활 기능 저하가 나타날 가능성이 높습니다. 보호자 상담, 학교 상담, 전문기관 연계를 권장합니다.';
+      }
+
+      const result = document.getElementById('result');
+      result.style.display = 'block';
+      result.innerHTML = `
+        <div>총점</div>
+        <div class="score">${total}점 / ${maxScore}점</div>
+        <div>위험도 환산: ${percent}%</div>
+        <div class="level ${className}">${level}</div>
+        <p>${guide}</p>
+      `;
+      result.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetForm() {
+      form.reset();
+      const result = document.getElementById('result');
+      result.style.display = 'none';
+      result.innerHTML = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
