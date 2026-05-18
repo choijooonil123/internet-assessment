@@ -205,8 +205,13 @@
             <label class="option">
               <input type="radio" name="q${index}" value="${score}" />
               ${score}점 ${labelText}
-            </label>
-          `}).join('')}
+            </label>`;
+          }).join('')}
+        </div>`;
+      form.appendChild(qBox);
+    });
+
+    function calculateScore() {
       let total = 0;
       let answered = 0;
 
