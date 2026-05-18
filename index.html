@@ -199,18 +199,14 @@
       qBox.innerHTML = `
         <div class="q-title">${index + 1}. ${q}</div>
         <div class="scale">
-          ${[1, 2, 3, 4].map(score => `
+          ${[1, 2, 3, 4].map(score => {
+            const labelText = score === 1 ? '전혀 그렇지 않다' : score === 2 ? '그렇지 않다' : score === 3 ? '그렇다' : '매우 그렇다';
+            return `
             <label class="option">
               <input type="radio" name="q${index}" value="${score}" />
-              ${score}점
+              ${score}점 ${labelText}
             </label>
-          `).join('')}
-        </div>
-      `;
-      form.appendChild(qBox);
-    });
-
-    function calculateScore() {
+          `}).join('')}
       let total = 0;
       let answered = 0;
 
